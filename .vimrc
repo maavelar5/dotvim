@@ -59,7 +59,6 @@ nmap <Leader>t :Tags<CR>
 nmap <Leader>b :Buffers<CR>
 
 nmap <Leader>w :write<CR>
-nmap <Leader>e :Files ~/<CR>
 nmap <Leader>q :q<CR>
 
 nmap <Leader>2 :split<CR>
@@ -80,6 +79,7 @@ inoremap (<CR>  (<CR>)<Esc>O
 inoremap [<CR>  [<CR>]<Esc>O
 
 autocmd BufWritePre *.cpp :%s/\s\+$//e
+autocmd BufWritePre *.c :%s/\s\+$//e
 
 nmap <F3> :call Compile_Arepg()<CR>
 nmap <F4> :call Clean_Arepg()<CR>
