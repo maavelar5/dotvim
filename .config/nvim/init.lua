@@ -18,17 +18,24 @@ vim.g.nobackup = true
 vim.g.nowritebackup = true
 vim.g.noswapfile = true
 
+vim.opt.relativenumber = true
+vim.opt.number = true
+
 local Plug = vim.fn['plug#']
 
 vim.call('plug#begin')
-    Plug('/usr/bin/fzf')
     Plug('junegunn/fzf.vim')
+    Plug('junegunn/fzf')
     Plug('fcpg/vim-fahrenheit')
     Plug('rhysd/vim-clang-format')
     Plug('vim-airline/vim-airline')
     Plug('vim-airline/vim-airline-themes')
     Plug('neovim/nvim-lspconfig')
+    Plug('bluz71/vim-moonfly-colors', { as = 'moonfly'})
 vim.call('plug#end')
+
+
+vim.cmd [[colorscheme moonfly]]
 
 -- Color schemes should be loaded after plug#end().
 -- We prepend it with 'silent!' to ignore errors when it's not yet installed.
@@ -43,8 +50,10 @@ vim.api.nvim_set_keymap('n', '<leader>w', ':w<CR>', { noremap = true })
 vim.api.nvim_set_keymap('n', '<leader>b', ':Buffers<CR>', { noremap = true })
 vim.api.nvim_set_keymap('n', '<leader>q', ':q<CR>', { noremap = true })
 vim.api.nvim_set_keymap('n', 'gd', '<C-]>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<leader>e', ':Commands<CR>', { noremap = true })
 
 require'lspconfig'.clangd.setup{}
 
 vim.opt.completeopt:remove("preview")
 
+vim.opt.clipboard = vim.opt.clipboard + "unnamedplus"
