@@ -1,5 +1,8 @@
 local vim = vim
 
+ignorescase = true
+smartcase = true
+
 vim.g.ignorecase = true
 vim.g.smartcase = true
 vim.g.autoindent = true
@@ -20,6 +23,8 @@ vim.g.noswapfile = true
 
 vim.opt.relativenumber = true
 vim.opt.number = true
+
+vim.opt.autochdir = true
 
 local Plug = vim.fn['plug#']
 
@@ -46,14 +51,20 @@ vim.g.fzf_layout = { right = '~50%' }  -- Adjust as needed
 vim.g.fzf_preview_window = ''          -- Disable preview window
 
 vim.api.nvim_set_keymap('n', '<leader>f', ':Files<CR>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<leader>F', ':GFiles<CR>', { noremap = true })
 vim.api.nvim_set_keymap('n', '<leader>w', ':w<CR>', { noremap = true })
 vim.api.nvim_set_keymap('n', '<leader>b', ':Buffers<CR>', { noremap = true })
 vim.api.nvim_set_keymap('n', '<leader>q', ':q<CR>', { noremap = true })
 vim.api.nvim_set_keymap('n', 'gd', '<C-]>', { noremap = true })
 vim.api.nvim_set_keymap('n', '<leader>e', ':Commands<CR>', { noremap = true })
+vim.api.nvim_set_keymap('i', '<C-p>', '<C-x><C-o>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<leader>q', ':q<CR>', { noremap = true })
+-- vim.api.nvim_set_keymap('i', '<tab>', '<C-x><C-x>', { noremap = true })
 
 require'lspconfig'.clangd.setup{}
+require'lspconfig'.ts_ls.setup{}
 
 vim.opt.completeopt:remove("preview")
 
 vim.opt.clipboard = vim.opt.clipboard + "unnamedplus"
+
