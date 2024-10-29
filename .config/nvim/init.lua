@@ -1,30 +1,25 @@
 local vim = vim
 
-ignorescase = true
-smartcase = true
-
-vim.g.ignorecase = true
-vim.g.smartcase = true
-vim.g.autoindent = true
-vim.g.cindent = true
-vim.g.confirm = true
-vim.g.number = true
-vim.g.shiftwidth=4
-vim.g.softtabstop=4
-vim.g.expandtab = true
-vim.g.laststatus=2
-vim.g.showmode = true
-vim.g.showcmd = true
-vim.g.relativenumber = true
-vim.g.cursorline = true
+vim.o.ignorecase = true
+vim.o.smartcase = true
+vim.o.autoindent = true
+vim.o.cindent = true
+vim.o.confirm = true
+vim.o.number = true
+vim.o.shiftwidth=4
+vim.o.softtabstop=4
+vim.o.expandtab = true
+vim.o.laststatus=2
+vim.o.showmode = true
+vim.o.showcmd = true
+vim.o.relativenumber = true
+vim.o.cursorline = true
 vim.g.nobackup = true
 vim.g.nowritebackup = true
 vim.g.noswapfile = true
 
 vim.opt.relativenumber = true
 vim.opt.number = true
-
-vim.opt.autochdir = true
 
 local Plug = vim.fn['plug#']
 
@@ -37,8 +32,10 @@ vim.call('plug#begin')
     Plug('vim-airline/vim-airline-themes')
     Plug('neovim/nvim-lspconfig')
     Plug('bluz71/vim-moonfly-colors', { as = 'moonfly'})
+    -- Plug('rhysd/vim-clang-format')
 vim.call('plug#end')
 
+vim.opt.autochdir = true
 
 vim.cmd [[colorscheme moonfly]]
 
@@ -58,13 +55,14 @@ vim.api.nvim_set_keymap('n', '<leader>q', ':q<CR>', { noremap = true })
 vim.api.nvim_set_keymap('n', 'gd', '<C-]>', { noremap = true })
 vim.api.nvim_set_keymap('n', '<leader>e', ':Commands<CR>', { noremap = true })
 vim.api.nvim_set_keymap('i', '<C-p>', '<C-x><C-o>', { noremap = true })
-vim.api.nvim_set_keymap('n', '<leader>q', ':q<CR>', { noremap = true })
--- vim.api.nvim_set_keymap('i', '<tab>', '<C-x><C-x>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<leader>q', ':q<CR>', { noremap = true }) 
 
 require'lspconfig'.clangd.setup{}
-require'lspconfig'.ts_ls.setup{}
+require'lspconfig'.pylsp.setup{}
+require'lspconfig'.ts_ls.setup{} 
 
 vim.opt.completeopt:remove("preview")
 
 vim.opt.clipboard = vim.opt.clipboard + "unnamedplus"
 
+vim.opt.signcolumn = "number"
