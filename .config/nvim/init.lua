@@ -33,6 +33,9 @@ vim.call('plug#begin')
     Plug('neovim/nvim-lspconfig')
     Plug('bluz71/vim-moonfly-colors', { as = 'moonfly'})
     -- Plug('rhysd/vim-clang-format')
+    -- Plug('tpope/vim-fugitive')
+    Plug('airblade/vim-gitgutter')
+    Plug('ms-jpq/coq_nvim', {branch = "coq"})
 vim.call('plug#end')
 
 vim.opt.autochdir = true
@@ -54,8 +57,9 @@ vim.api.nvim_set_keymap('n', '<leader>b', ':Buffers<CR>', { noremap = true })
 vim.api.nvim_set_keymap('n', '<leader>q', ':q<CR>', { noremap = true })
 vim.api.nvim_set_keymap('n', 'gd', '<C-]>', { noremap = true })
 vim.api.nvim_set_keymap('n', '<leader>e', ':Commands<CR>', { noremap = true })
-vim.api.nvim_set_keymap('i', '<C-p>', '<C-x><C-o>', { noremap = true })
+-- vim.api.nvim_set_keymap('i', '<C-p>', '<C-x><C-o>', { noremap = true })
 vim.api.nvim_set_keymap('n', '<leader>q', ':q<CR>', { noremap = true }) 
+vim.api.nvim_set_keymap('n', '<leader>a', ':Ag<CR>', { noremap = true }) 
 
 require'lspconfig'.clangd.setup{}
 require'lspconfig'.pylsp.setup{}
@@ -66,3 +70,9 @@ vim.opt.completeopt:remove("preview")
 vim.opt.clipboard = vim.opt.clipboard + "unnamedplus"
 
 vim.opt.signcolumn = "number"
+
+vim.o.signcolumn="yes"
+-- highlight SignColumn ctermbg=darkgray
+--vim.g.gitgutter_sign_added = 'xx'
+--vim.g.gitgutter_sign_modified = 'yy'
+--vim.g.gitgutter_highlight_lines = 1
