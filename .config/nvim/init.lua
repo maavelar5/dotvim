@@ -20,6 +20,7 @@ vim.g.noswapfile = true
 
 vim.opt.relativenumber = true
 vim.opt.number = true
+vim.opt.autochdir = true
 
 local Plug = vim.fn['plug#']
 
@@ -32,13 +33,11 @@ vim.call('plug#begin')
     Plug('vim-airline/vim-airline-themes')
     Plug('neovim/nvim-lspconfig')
     Plug('bluz71/vim-moonfly-colors', { as = 'moonfly'})
-    -- Plug('rhysd/vim-clang-format')
-    -- Plug('tpope/vim-fugitive')
+    Plug('rhysd/vim-clang-format')
     Plug('airblade/vim-gitgutter')
-    Plug('ms-jpq/coq_nvim', {branch = "coq"})
+    Plug('ms-jpq/coq_nvim', { branch = 'coq' })
+    Plug('subnut/nvim-ghost.nvim')
 vim.call('plug#end')
-
-vim.opt.autochdir = true
 
 vim.cmd [[colorscheme moonfly]]
 
