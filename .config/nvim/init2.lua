@@ -47,8 +47,9 @@ require("lazy").setup({
   { "subnut/nvim-ghost.nvim" },
 
   -- telescope
-  { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
+  { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim", "nvim-lua/popup.nvim" } },
   { "nvim-telescope/telescope-fzf-native.nvim", build = "make", cond = vim.fn.executable("make") == 1 },
+  { "nvim-telescope/telescope-media-files.nvim" },
   {
       "kelly-lin/telescope-ag",
       dependencies = { "nvim-telescope/telescope.nvim" },
@@ -153,14 +154,51 @@ require("lazy").setup({
           vim.keymap.set("n", "<C-n>", function() require("hover").hover_switch("next") end,
           { desc = "Next Hover" })
       end,
-  }
+  },
+  { "miikanissi/modus-themes.nvim", priority = 1000 },
+  {
+      "lervag/vimtex",
+      ft = "tex",
+      init = function()
+          -- General
+          vim.g.vimtex_view_method = "zathura"     -- or skim / sioyek / okular
+          vim.g.vimtex_compiler_method = "latexmk"
+          vim.g.vimtex_quickfix_mode = 0           -- don’t auto-open quickfix
+          vim.g.vimtex_syntax_conceal_disable = 1  -- keep math symbols visible
+
+          -- Compiler options
+          vim.g.vimtex_compiler_latexmk = {
+              build_dir = "build",
+              options = {
+                  "-pdf",
+                  "-interaction=nonstopmode",
+                  "-synctex=1",
+              },
+          }
+      end
+  },
+  -- install without yarn or npm
+  {
+      "iamcco/markdown-preview.nvim",
+      cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+      ft = { "markdown" },
+      build = function() vim.fn["mkdp#util#install"]() end,
+  },
 })
 
--- vim.opt.background = "dark"
+vim.opt.background = "dark"
 
 -- COLORSCHEME
 vim.cmd.colorscheme("moonfly")
 -- vim.cmd.colorscheme("oxocarbon")
+
+-- vim.cmd.colorscheme("modus")
+
+-- Make sure cursorline is enabled
+-- vim.opt.cursorline = true
+
+-- Set highlight for the current line
+-- vim.api.nvim_set_hl(0, "CursorLine", { bg = "#000055" })  -- bright blue
 
 -- KEYMAPS (Telescope powered)
 local builtin = require("telescope.builtin")
@@ -168,7 +206,7 @@ vim.keymap.set("n", "<leader>F", builtin.find_files, {})
 vim.keymap.set("n", "<leader>f", builtin.git_files, {})
 vim.keymap.set("n", "<leader>b", builtin.buffers, {})
 vim.keymap.set("n", "<leader>e", builtin.commands, {})
-vim.keymap.set("n", "<leader>a", builtin.live_grep, {})
+vim.keymap.set("n", "<leader>g", builtin.live_grep, {})
 vim.keymap.set("n", "<leader>w", ":w<CR>", { noremap = true })
 vim.keymap.set("n", "<leader>q", ":q<CR>", { noremap = true })
 vim.keymap.set("n", "gd", "<C-]>", { noremap = true })
@@ -176,7 +214,6 @@ vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, {})
 
 
 local telescope = require("telescope")
-telescope.load_extension("ag")
 
 vim.keymap.set("n", "<leader>i", "<cmd>Telescope lsp_document_symbols<cr>", {
   desc = "Document symbols (imenu-like)"
@@ -197,7 +234,16 @@ require("telescope").setup({
       },
     },
   },
+  extensions = {
+      media_files = {
+          filetypes = {"png", "jpg", "mp4", "webm", "pdf"},
+          find_cmd = "rg"
+      }
+  },
 })
+
+telescope.load_extension("ag")
+telescope.load_extension('media_files')
 
 -- LSP SETUP
 local lspconfig = require("lspconfig")
