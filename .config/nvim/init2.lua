@@ -59,7 +59,6 @@ require("lazy").setup({
   {"nvim-tree/nvim-tree.lua"},
   {"nvim-tree/nvim-web-devicons"},
 
-
   -- dart
   { "dart-lang/dart-vim-plugin" },
   {
@@ -246,11 +245,8 @@ telescope.load_extension("ag")
 telescope.load_extension('media_files')
 
 -- LSP SETUP
-local lspconfig = require("lspconfig")
-lspconfig.clangd.setup({})
-lspconfig.pylsp.setup({})
--- lspconfig.tsserver.setup({})
-
+vim.lsp.enable('clangd')
+vim.lsp.enable('pylsp')
 
 require("nvim-tree").setup({
   view = {
@@ -274,10 +270,9 @@ require("nvim-tree").setup({
 
 vim.keymap.set("n", "<f12>", require("nvim-tree.api").tree.toggle, { noremap = true })
 
-local lspconfig = require("lspconfig")
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-lspconfig.dartls.setup({
+vim.lsp.config("dartls", {
   capabilities = capabilities,
   on_attach = function(_, bufnr)
     print("✅ Dart LSP attached with nvim-cmp")
@@ -299,7 +294,6 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     })
   end,
 })
-
 
 vim.keymap.set("n", "<leader>l", function() vim.lsp.buf.code_action() end, { desc = "LSP Code Action" })
 
