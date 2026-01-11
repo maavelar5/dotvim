@@ -207,7 +207,7 @@ vim.keymap.set("n", "<leader>b", builtin.buffers, {})
 vim.keymap.set("n", "<leader>e", builtin.commands, {})
 vim.keymap.set("n", "<leader>g", builtin.live_grep, {})
 vim.keymap.set("n", "<leader>w", ":w<CR>", { noremap = true })
-vim.keymap.set("n", "<leader>q", ":q<CR>", { noremap = true })
+vim.keymap.set("n", "<leader>q", ":bd<CR>", { noremap = true })
 vim.keymap.set("n", "gd", "<C-]>", { noremap = true })
 vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, {})
 
