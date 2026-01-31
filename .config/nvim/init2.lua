@@ -24,7 +24,7 @@ vim.opt.laststatus = 2
 vim.opt.showmode = true
 vim.opt.showcmd = true
 vim.opt.cursorline = true
-vim.opt.autochdir = true
+--vim.opt.autochdir = true
 vim.opt.signcolumn = "yes"
 vim.opt.clipboard:append("unnamedplus")
 vim.opt.completeopt:remove("preview")
@@ -147,7 +147,7 @@ require("lazy").setup({
           }
 
           -- Keymaps
-          vim.keymap.set("n", "<leader>k", require("hover").hover, { desc = "Hover" })
+          vim.keymap.set("n", "K", require("hover").hover, { desc = "Hover" })
           vim.keymap.set("n", "<C-p>", function() require("hover").hover_switch("previous") end,
           { desc = "Previous Hover" })
           vim.keymap.set("n", "<C-n>", function() require("hover").hover_switch("next") end,
@@ -183,6 +183,17 @@ require("lazy").setup({
       ft = { "markdown" },
       build = function() vim.fn["mkdp#util#install"]() end,
   },
+  {
+      "folke/tokyonight.nvim",
+      lazy = false,
+      priority = 1000,
+      opts = {},
+  },
+  {
+      "lukas-reineke/indent-blankline.nvim",
+      main = "ibl",
+      opts = {},
+  }
 })
 
 vim.opt.background = "dark"
@@ -190,8 +201,13 @@ vim.opt.background = "dark"
 -- COLORSCHEME
 vim.cmd.colorscheme("moonfly")
 -- vim.cmd.colorscheme("oxocarbon")
-
 -- vim.cmd.colorscheme("modus")
+
+
+require("ibl").setup({
+  indent = { char = "▏" },
+  scope = { enabled = true },
+})
 
 -- Make sure cursorline is enabled
 -- vim.opt.cursorline = true
@@ -295,7 +311,8 @@ vim.api.nvim_create_autocmd("BufWritePost", {
   end,
 })
 
-vim.keymap.set("n", "<leader>l", function() vim.lsp.buf.code_action() end, { desc = "LSP Code Action" })
+vim.keymap.set("n", "<leader>c", function() vim.lsp.buf.code_action() end, { desc = "LSP Code Action" })
+vim.keymap.set("n", "<leader>s", function() builtin.current_buffer_fuzzy_find() end, { desc = "LSP Code Action" })
 
 -- init.lua (assuming you already set up clangd with nvim-lspconfig)
 local patterns = { "*.c","*.h","*.cpp","*.hpp","*.cc","*.cxx","*.ixx" }
