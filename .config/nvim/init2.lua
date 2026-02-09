@@ -193,7 +193,36 @@ require("lazy").setup({
       "lukas-reineke/indent-blankline.nvim",
       main = "ibl",
       opts = {},
-  }
+  },
+  {
+      {'nvim-mini/mini.pairs', version = '*'},
+  },
+  {
+      {'nvim-lua/plenary.nvim'},
+  },
+  {
+      {'nvim-pack/nvim-spectre'},
+  },
+  {
+      'smoka7/hop.nvim',
+      version = "*",
+      opts = {
+          keys = 'etovxqpdygfblzhckisuran'
+      }
+  },
+  {
+      "hedyhli/outline.nvim",
+      cmd = { "Outline", "OutlineOpen" },
+      config = function()
+          require("outline").setup({
+              position = "right",
+              width = 30,
+          })
+      end,
+  },
+  {
+      'mg979/vim-visual-multi'
+  },
 })
 
 vim.opt.background = "dark"
@@ -203,6 +232,8 @@ vim.cmd.colorscheme("moonfly")
 -- vim.cmd.colorscheme("oxocarbon")
 -- vim.cmd.colorscheme("modus")
 
+require('spectre').setup()
+require('mini.pairs').setup()
 
 require("ibl").setup({
   indent = { char = "▏" },
@@ -224,6 +255,10 @@ vim.keymap.set("n", "<leader>e", builtin.commands, {})
 vim.keymap.set("n", "<leader>g", builtin.live_grep, {})
 vim.keymap.set("n", "<leader>w", ":w<CR>", { noremap = true })
 vim.keymap.set("n", "<leader>q", ":bd<CR>", { noremap = true })
+vim.keymap.set("n", "<leader>r", ":Spectre<CR>", { noremap = true })
+vim.keymap.set("n", "<leader>a", ":HopChar1<CR>", { noremap = true })
+vim.keymap.set("n", "<leader>n", ":lua vim.diagnostic.goto_next()<CR>", { noremap = true })
+vim.keymap.set("n", "<leader>p", ":lua vim.diagnostic.goto_prev()<CR>", { noremap = true })
 vim.keymap.set("n", "gd", "<C-]>", { noremap = true })
 vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, {})
 
@@ -263,6 +298,9 @@ telescope.load_extension('media_files')
 -- LSP SETUP
 vim.lsp.enable('clangd')
 vim.lsp.enable('pylsp')
+vim.lsp.enable('gopls')
+-- vim.lsp.enable('dartls')
+vim.lsp.enable('lua')
 
 require("nvim-tree").setup({
   view = {
@@ -285,6 +323,7 @@ require("nvim-tree").setup({
 })
 
 vim.keymap.set("n", "<f12>", require("nvim-tree.api").tree.toggle, { noremap = true })
+vim.keymap.set("n", "<f11>", ":Outline<CR>", {noremap = true})
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
