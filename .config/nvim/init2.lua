@@ -181,7 +181,11 @@ require("lazy").setup({
       "iamcco/markdown-preview.nvim",
       cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
       ft = { "markdown" },
-      build = function() vim.fn["mkdp#util#install"]() end,
+      build = function()
+          -- make the plugin runtime available so the vimscript function is defined
+          vim.cmd("packadd markdown-preview.nvim")
+          vim.fn["mkdp#util#install"]()
+      end,
   },
   {
       "folke/tokyonight.nvim",
@@ -296,11 +300,11 @@ telescope.load_extension("ag")
 telescope.load_extension('media_files')
 
 -- LSP SETUP
-vim.lsp.enable('clangd')
-vim.lsp.enable('pylsp')
-vim.lsp.enable('gopls')
--- vim.lsp.enable('dartls')
-vim.lsp.enable('lua')
+vim.lsp.enable("clangd")
+vim.lsp.enable("pylsp")
+vim.lsp.enable("gopls")
+vim.lsp.enable("lua_ls")
+vim.lsp.enable("dartls")
 
 require("nvim-tree").setup({
   view = {
