@@ -227,6 +227,11 @@ require("lazy").setup({
   {
       'mg979/vim-visual-multi'
   },
+  {
+      "folke/trouble.nvim",
+      dependencies = { "nvim-tree/nvim-web-devicons" },
+      opts = {},
+  },
 })
 
 vim.opt.background = "dark"
@@ -369,3 +374,14 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     })
   end,
 })
+
+vim.keymap.set("n", "<leader>xc", "<cmd>make<cr>")
+vim.keymap.set("n", "<leader>xt", "<cmd>Trouble diagnostics toggle<cr>")
+vim.keymap.set("n", "<leader>xq", "<cmd>Trouble quickfix toggle<cr>")
+
+-- next / prev error
+vim.keymap.set("n", "<leader>]", "<cmd>cnext<cr>")
+vim.keymap.set("n", "<leader>[", "<cmd>cprev<cr>")
+
+vim.o.exrc = true
+vim.o.secure = true
