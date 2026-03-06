@@ -231,7 +231,7 @@ require("lazy").setup({
       "folke/trouble.nvim",
       dependencies = { "nvim-tree/nvim-web-devicons" },
       opts = {},
-  },
+  }
 })
 
 vim.opt.background = "dark"
@@ -385,3 +385,16 @@ vim.keymap.set("n", "<leader>[", "<cmd>cprev<cr>")
 
 vim.o.exrc = true
 vim.o.secure = true
+
+local black = "#000000"
+local blue = "#000099"
+
+vim.api.nvim_set_hl(0, "Normal", { bg = black })
+vim.api.nvim_set_hl(0, "NormalFloat", { bg = black })
+vim.api.nvim_set_hl(0, "SignColumn", { bg = black })
+vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = black })
+
+-- visual selection
+vim.api.nvim_set_hl(0, "Visual", { bg = blue, fg = "NONE" })
+
+vim.opt.cursorline = true
