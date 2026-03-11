@@ -257,8 +257,10 @@ require("ibl").setup({
 
 -- KEYMAPS (Telescope powered)
 local builtin = require("telescope.builtin")
+
 vim.keymap.set("n", "<leader>F", builtin.find_files, {})
-vim.keymap.set("n", "<leader>f", builtin.git_files, {})
+--vim.keymap.set("n", "<leader>f", builtin.git_files, {})
+
 vim.keymap.set("n", "<leader>b", builtin.buffers, {})
 vim.keymap.set("n", "<leader>e", builtin.commands, {})
 vim.keymap.set("n", "<leader>g", builtin.live_grep, {})
@@ -271,6 +273,13 @@ vim.keymap.set("n", "<leader>p", ":lua vim.diagnostic.goto_prev()<CR>", { norema
 vim.keymap.set("n", "gd", "<C-]>", { noremap = true })
 vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, {})
 
+
+vim.keymap.set("n", "<leader>f", function()
+  builtin.git_files({
+    show_untracked = true,
+    fallback = true,
+  })
+end, {})
 
 local telescope = require("telescope")
 
@@ -398,3 +407,25 @@ vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = black })
 vim.api.nvim_set_hl(0, "Visual", { bg = blue, fg = "NONE" })
 
 vim.opt.cursorline = true
+
+vim.lsp.config("rust_analyzer", {
+  capabilities = capabilities,
+
+  settings = {
+    ["rust-analyzer"] = {
+      cargo = {
+        allFeatures = true,
+      },
+      checkOnSave = true,
+      check = {
+        command = "clippy",
+      },
+    },
+  },
+
+  on_attach = function(_, bufnr)
+    print("🦀 Rust LSP attached")
+  end,
+})
+
+vim.lsp.enable("rust_analyzer")
