@@ -38,8 +38,8 @@ vim.g.noswapfile = true
 require("lazy").setup({
   { "fcpg/vim-fahrenheit" },
   { "rhysd/vim-clang-format" },
-  { "vim-airline/vim-airline" },
-  { "vim-airline/vim-airline-themes" },
+  -- { "vim-airline/vim-airline" },
+  -- { "vim-airline/vim-airline-themes" },
   { "neovim/nvim-lspconfig" },
   { "bluz71/vim-moonfly-colors", name = "moonfly" },
   { "airblade/vim-gitgutter" },
@@ -231,15 +231,75 @@ require("lazy").setup({
       "folke/trouble.nvim",
       dependencies = { "nvim-tree/nvim-web-devicons" },
       opts = {},
+  },
+  { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+  {
+      "nvim-lualine/lualine.nvim",
+      dependencies = { "nvim-tree/nvim-web-devicons" }
+  },
+  {
+      "katawful/kat.nvim", version = "3.1"
+  },
+  {
+      "folke/tokyonight.nvim",
+      lazy = false,
+      priority = 1000,
+      opts = {},
   }
 })
 
-vim.opt.background = "dark"
+-- vim.opt.background = "dark"
+-- vim.opt.background = "light"
+
+vim.opt.termguicolors = true
 
 -- COLORSCHEME
 vim.cmd.colorscheme("moonfly")
 -- vim.cmd.colorscheme("oxocarbon")
 -- vim.cmd.colorscheme("modus")
+--
+
+--require("catppuccin").setup({
+--  flavour = "latte",
+--  integrations = {
+--    telescope = true,
+--    cmp = true,
+--    treesitter = true,
+--    native_lsp = {
+--      enabled = true,
+--    },
+--  },
+--})
+
+-- vim.cmd.colorscheme("catppuccin")
+--require("lualine").setup({
+--  options = {
+--    theme = "catppuccin"
+--  }
+--})
+
+
+--vim.cmd.colorscheme("kat.nwim")
+--require("lualine").setup({
+--  options = {
+--    theme = "kat.nwim"
+--  }
+--})
+
+-- vim.cmd.colorscheme("tokyonight-day")
+--require("lualine").setup({
+--  options = {
+--    theme = "tokyonight-day"
+--  }
+--})
+
+--vim.cmd.colorscheme("modus_operandi")
+--
+--require("lualine").setup({
+--  options = {
+--    theme = "modus_operandi"
+--  }
+--})
 
 require('spectre').setup()
 require('mini.pairs').setup()
@@ -397,7 +457,7 @@ vim.o.secure = true
 
 local black = "#000000"
 local blue = "#000099"
-
+--
 vim.api.nvim_set_hl(0, "Normal", { bg = black })
 vim.api.nvim_set_hl(0, "NormalFloat", { bg = black })
 vim.api.nvim_set_hl(0, "SignColumn", { bg = black })
@@ -405,7 +465,6 @@ vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = black })
 
 -- visual selection
 vim.api.nvim_set_hl(0, "Visual", { bg = blue, fg = "NONE" })
-
 vim.opt.cursorline = true
 
 vim.lsp.config("rust_analyzer", {
@@ -424,7 +483,7 @@ vim.lsp.config("rust_analyzer", {
   },
 
   on_attach = function(_, bufnr)
-    print("🦀 Rust LSP attached")
+    print("Rust LSP attached")
   end,
 })
 
