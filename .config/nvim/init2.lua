@@ -245,61 +245,80 @@ require("lazy").setup({
       lazy = false,
       priority = 1000,
       opts = {},
+  },
+  {
+      'nvim-treesitter/nvim-treesitter',
+      lazy = false,
+      build = ':TSUpdate'
+  },
+  { "ellisonleao/gruvbox.nvim", priority = 1000, config = true},
+  {
+      "scottmckendry/cyberdream.nvim",
+      lazy = false,
+      priority = 1000,
   }
 })
 
 -- vim.opt.background = "dark"
--- vim.opt.background = "light"
+vim.opt.background = "light"
 
 vim.opt.termguicolors = true
 
 -- COLORSCHEME
-vim.cmd.colorscheme("moonfly")
+-- vim.cmd.colorscheme("moonfly")
 -- vim.cmd.colorscheme("oxocarbon")
 -- vim.cmd.colorscheme("modus")
---
+-- vim.cmd.colorscheme("cyberdream")
+-- vim.cmd.colorscheme("peachpuff")
 
---require("catppuccin").setup({
---  flavour = "latte",
---  integrations = {
---    telescope = true,
---    cmp = true,
---    treesitter = true,
---    native_lsp = {
---      enabled = true,
---    },
+--require("gruvbox").setup({
+--  terminal_colors = true, -- add neovim terminal colors
+--  undercurl = true,
+--  underline = true,
+--  bold = true,
+--  italic = {
+--    strings = true,
+--    emphasis = true,
+--    comments = true,
+--    operators = false,
+--    folds = true,
 --  },
+--  strikethrough = true,
+--  invert_selection = false,
+--  invert_signs = false,
+--  invert_tabline = false,
+--  inverse = true, -- invert background for search, diffs, statuslines and errors
+--  contrast = "hard", -- can be "hard", "soft" or empty string
+--  palette_overrides = {},
+--  overrides = {},
+--  dim_inactive = false,
+--  transparent_mode = false,
 --})
-
--- vim.cmd.colorscheme("catppuccin")
---require("lualine").setup({
---  options = {
---    theme = "catppuccin"
---  }
---})
-
-
---vim.cmd.colorscheme("kat.nwim")
---require("lualine").setup({
---  options = {
---    theme = "kat.nwim"
---  }
---})
-
--- vim.cmd.colorscheme("tokyonight-day")
---require("lualine").setup({
---  options = {
---    theme = "tokyonight-day"
---  }
---})
-
---vim.cmd.colorscheme("modus_operandi")
 --
---require("lualine").setup({
---  options = {
---    theme = "modus_operandi"
---  }
---})
+--vim.cmd.colorscheme("gruvbox")
+
+require("catppuccin").setup({
+  flavour = "mocha",
+  integrations = {
+    telescope = true,
+    cmp = true,
+    treesitter = true,
+    native_lsp = {
+      enabled = true,
+    },
+  },
+})
+
+vim.cmd.colorscheme("catppuccin")
+--vim.cmd.colorscheme("kat.nwim")
+--vim.cmd.colorscheme("tokyonight-day")
+--vim.cmd.colorscheme("modus_operandi")
+
+require("lualine").setup({
+  options = {
+    theme = "auto"
+  }
+})
 
 require('spectre').setup()
 require('mini.pairs').setup()
@@ -455,16 +474,16 @@ vim.keymap.set("n", "<leader>[", "<cmd>cprev<cr>")
 vim.o.exrc = true
 vim.o.secure = true
 
-local black = "#000000"
-local blue = "#000099"
+--local black = "#000000"
+--local blue = "#000099"
+----
+--vim.api.nvim_set_hl(0, "Normal", { bg = black })
+--vim.api.nvim_set_hl(0, "NormalFloat", { bg = black })
+--vim.api.nvim_set_hl(0, "SignColumn", { bg = black })
+--vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = black })
 --
-vim.api.nvim_set_hl(0, "Normal", { bg = black })
-vim.api.nvim_set_hl(0, "NormalFloat", { bg = black })
-vim.api.nvim_set_hl(0, "SignColumn", { bg = black })
-vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = black })
-
--- visual selection
-vim.api.nvim_set_hl(0, "Visual", { bg = blue, fg = "NONE" })
+---- visual selection
+--vim.api.nvim_set_hl(0, "Visual", { bg = blue, fg = "NONE" })
 vim.opt.cursorline = true
 
 vim.lsp.config("rust_analyzer", {
