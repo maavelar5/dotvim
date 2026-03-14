@@ -1,0 +1,94 @@
+{
+    "window.commandCenter": false,
+    "[dart]": {
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "editor.rulers": [
+            80
+        ],
+        "editor.selectionHighlight": false,
+        "editor.tabCompletion": "onlySnippets",
+        "editor.wordBasedSuggestions": "off"
+    },
+    "workbench.statusBar.visible": true,
+    "editor.minimap.enabled": false,
+    "editor.renderWhitespace": "none",
+    "editor.cursorBlinking": "solid",
+    // "editor.fontFamily": "JetBrains Mono, Menlo, monospace",
+    "editor.fontFamily": "LiberationMono",
+    "editor.fontLigatures": true,
+    "editor.fontSize": 14,
+    "editor.tabSize": 4,
+    "editor.wordWrap": "on",
+    "editor.smoothScrolling": true,
+    "workbench.startupEditor": "none",
+    "workbench.editor.showTabs": "single",
+    "breadcrumbs.enabled": false,
+    "window.titleBarStyle": "custom",
+    "workbench.activityBar.location": "hidden",
+    "editor.lineNumbers": "relative",
+    "workbench.iconTheme": "catppuccin-frappe",
+    "editor.renderLineHighlight": "line",
+    "workbench.colorCustomizations": {
+        "editor.lineHighlightBorder": "#444444",
+        "statusBar.background": "#875f00",
+        "statusBar.noFolderBackground": "#875f00",
+        "statusBar.debuggingBackground": "#875f00",
+        "statusBar.foreground": "#ffffff",
+        "statusBar.debuggingForeground": "#ffffff"
+    },
+    "vim.useSystemClipboard": true,
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+                "g",
+                "r"
+            ],
+            "commands": [
+                "editor.action.referenceSearch.trigger"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "h"
+            ],
+            "command": "editor.action.showHover",
+            "when": "editorTextFocus && vim.mode == 'Normal'"
+        },
+    ],
+    "vim.visualModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+                "g",
+                "r"
+            ],
+            "commands": [
+                "editor.action.referenceSearch.trigger"
+            ]
+        }
+    ],
+    "workbench.editor.enablePreview": false, // Prevents temporary editors
+    "workbench.editor.openSideBySideDirection": "right", // C-w v split style
+    "workbench.editor.highlightModifiedTabs": false, // Just in case tabs ever reappear
+    "editor.scrollbar.vertical": "hidden",
+    "editor.scrollbar.horizontal": "hidden",
+    "vim.statusBarColorControl": true,
+    "vim.statusBarColors": {
+        "normal": "#1e1e1e",
+        "insert": "#005f87",
+        "visual": "#875f00",
+        "replace": "#870000"
+    },
+    "editor.hover.enabled": true,
+    "editor.hover.delay": 100,
+    "editor.hover.sticky": false,
+    "dart.debugExternalPackageLibraries": true,
+    "dart.debugSdkLibraries": true,
+    "workbench.colorTheme": "Catppuccin Frappé",
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+}
