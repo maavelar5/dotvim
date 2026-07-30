@@ -33,6 +33,7 @@ vim.g.mapleader = ' '
 vim.g.nobackup = true
 vim.g.nowritebackup = true
 vim.g.noswapfile = true
+vim.o.autoread = true
 
 -- LAZY.NVIM PLUGIN SETUP
 require("lazy").setup({
@@ -138,8 +139,8 @@ require("lazy").setup({
               init = function()
                   -- Add providers here
                   require("hover.providers.lsp")
-                  -- require("hover.providers.gh")  -- GitHub
-                  -- require("hover.providers.dap") -- Debug Adapter
+                  require("hover.providers.gh")  -- GitHub
+                  require("hover.providers.dap") -- Debug Adapter
                   -- etc.
               end,
               preview_opts = { border = "single" },
@@ -256,11 +257,234 @@ require("lazy").setup({
       "scottmckendry/cyberdream.nvim",
       lazy = false,
       priority = 1000,
+  },
+  {
+      "nvim-flutter/flutter-tools.nvim",
+      dependencies = {
+          "nvim-lua/plenary.nvim",
+          "mfussenegger/nvim-dap",
+      },
+      config = function()
+          local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+          require("flutter-tools").setup({
+              fvm = true,
+              debugger = {
+                  enabled = true,
+                  run_via_dap = true,
+              },
+              lsp = {
+                  capabilities = capabilities,
+                  color = { enabled = true },
+              },
+          })
+      end,
+  },
+  {
+      "rcarriga/nvim-dap-ui",
+      dependencies = {
+          "mfussenegger/nvim-dap",
+          "nvim-neotest/nvim-nio",
+      },
+      config = function()
+          local dap = require("dap")
+          local dapui = require("dapui")
+
+          vim.o.switchbuf = "useopen,uselast"
+          dap.defaults.fallback.switchbuf = "useopen,uselast"
+
+          local function jump_to_top_frame()
+              local session = dap.session()
+              if not session then
+                  return
+              end
+
+              local thread_id = session.stopped_thread_id
+              if not thread_id then
+                  return
+              end
+
+              session:request("stackTrace", {
+                  threadId = thread_id,
+                  startFrame = 0,
+                  levels = 1,
+              }, function(err, response)
+                  if err or not response or not response.stackFrames or not response.stackFrames[1] then
+                      return
+                  end
+
+                  local frame = response.stackFrames[1]
+                  local path = frame.source and frame.source.path
+
+                  if not path or path == "" then
+                      return
+                  end
+
+                  vim.schedule(function()
+                      vim.cmd("edit " .. vim.fn.fnameescape(path))
+                      pcall(vim.api.nvim_win_set_cursor, 0, {
+                          frame.line or 1,
+                          math.max((frame.column or 1) - 1, 0),
+                      })
+                      vim.cmd("normal! zvzz")
+                  end)
+              end)
+          end
+
+          dapui.setup({
+              icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
+              controls = {
+                  icons = {
+                      pause = '⏸',
+                      play = '▶',
+                      step_into = '⏎',
+                      step_over = '⏭',
+                      step_out = '⏮',
+                      step_back = 'b',
+                      run_last = '▶▶',
+                      terminate = '⏹',
+                      disconnect = '⏏',
+                  },
+              },
+          })
+
+          dap.listeners.after.event_initialized.dapui_config = function()
+              dapui.open()
+          end
+
+          dap.listeners.after.event_stopped["dap_jump_to_frame"] = function()
+              jump_to_top_frame()
+          end
+
+          dap.listeners.before.event_terminated.dapui_config = function()
+              dapui.close()
+          end
+          dap.listeners.before.event_exited.dapui_config = function()
+              dapui.close()
+          end
+
+          vim.keymap.set("n", "<F5>", dap.continue, { desc = "DAP Continue" })
+          vim.keymap.set("n", "<F6>", dap.step_over, { desc = "DAP Step Over" })
+          vim.keymap.set("n", "<F7>", dap.step_into, { desc = "DAP Step Into" })
+          vim.keymap.set("n", "<F8>", dap.step_out, { desc = "DAP Step Out" })
+          vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "DAP Breakpoint" })
+          vim.keymap.set("n", "<leader>dB", function()
+              dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
+          end, { desc = "DAP Conditional Breakpoint" })
+      end,
+  },
+  {
+      "idr4n/github-monochrome.nvim",
+      lazy = false,
+      priority = 1000,
+      opts = {},
+  },
+  {
+      "GeorgesAlkhouri/nvim-aider",
+      cmd = "Aider",
+      -- Example key mappings for common actions:
+      keys = {
+          { "<leader>a/", "<cmd>Aider toggle<cr>", desc = "Toggle Aider" },
+          { "<leader>as", "<cmd>Aider send<cr>", desc = "Send to Aider", mode = { "n", "v" } },
+          { "<leader>ac", "<cmd>Aider command<cr>", desc = "Aider Commands" },
+          { "<leader>ab", "<cmd>Aider buffer<cr>", desc = "Send Buffer" },
+          { "<leader>a+", "<cmd>Aider add<cr>", desc = "Add File" },
+          { "<leader>a-", "<cmd>Aider drop<cr>", desc = "Drop File" },
+          { "<leader>ar", "<cmd>Aider add readonly<cr>", desc = "Add Read-Only" },
+          { "<leader>aR", "<cmd>Aider reset<cr>", desc = "Reset Session" },
+          -- Example nvim-tree.lua integration if needed
+          { "<leader>a+", "<cmd>AiderTreeAddFile<cr>", desc = "Add File from Tree to Aider", ft = "NvimTree" },
+          { "<leader>a-", "<cmd>AiderTreeDropFile<cr>", desc = "Drop File from Tree from Aider", ft = "NvimTree" },
+      },
+      dependencies = {
+          { "folke/snacks.nvim", version = ">=2.24.0" },
+          --- The below dependencies are optional
+          "catppuccin/nvim",
+          "nvim-tree/nvim-tree.lua",
+          --- Neo-tree integration
+          {
+              "nvim-neo-tree/neo-tree.nvim",
+              opts = function(_, opts)
+                  -- Example mapping configuration (already set by default)
+                  -- opts.window = {
+                      --   mappings = {
+                          --     ["+"] = { "nvim_aider_add", desc = "add to aider" },
+                          --     ["-"] = { "nvim_aider_drop", desc = "drop from aider" }
+                          --     ["="] = { "nvim_aider_add_read_only", desc = "add read-only to aider" }
+                          --   }
+                          -- }
+                          require("nvim_aider.neo_tree").setup(opts)
+                      end,
+                  },
+      },
+      config = true,
+  },
+  {
+      "yetone/avante.nvim",
+      build = vim.fn.has("win32") ~= 0
+          and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false"
+          or "make",
+      event = "VeryLazy",
+      version = false, -- Never set this value to "*"! Never!
+      ---@module 'avante'
+      ---@type avante.Config
+      opts = {
+          instructions_file = "avante.md",
+          provider = "ollama",
+          providers = {
+              ollama = {
+                  endpoint = "http://127.0.0.1:11434",
+                  model = "qwen2.5-coder:7b",
+                  timeout = 30000,
+                  extra_request_body = {
+                      temperature = 0.1,
+                  },
+              },
+          },
+      },
+      dependencies = {
+          "nvim-lua/plenary.nvim",
+          "MunifTanjim/nui.nvim",
+          --- The below dependencies are optional,
+          "nvim-mini/mini.pick", -- for file_selector provider mini.pick
+          "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
+          "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
+          "ibhagwan/fzf-lua", -- for file_selector provider fzf
+          "stevearc/dressing.nvim", -- for input provider dressing
+          "folke/snacks.nvim", -- for input provider snacks
+          "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+          "zbirenbaum/copilot.lua", -- for providers='copilot'
+          {
+              -- support for image pasting
+              "HakonHarnes/img-clip.nvim",
+              event = "VeryLazy",
+              opts = {
+                  -- recommended settings
+                  default = {
+                      embed_image_as_base64 = false,
+                      prompt_for_file_name = false,
+                      drag_and_drop = {
+                          insert_mode = true,
+                      },
+                      -- required for Windows users
+                      use_absolute_path = true,
+                  },
+              },
+          },
+          {
+              -- Make sure to set this up properly if you have lazy=true
+              'MeanderingProgrammer/render-markdown.nvim',
+              opts = {
+                  file_types = { "markdown", "Avante" },
+              },
+              ft = { "markdown", "Avante" },
+          },
+      },
   }
 })
 
--- vim.opt.background = "dark"
-vim.opt.background = "light"
+vim.opt.background = "dark"
+-- vim.opt.background = "light"
 
 vim.opt.termguicolors = true
 
@@ -397,7 +621,7 @@ vim.lsp.enable("clangd")
 vim.lsp.enable("pylsp")
 vim.lsp.enable("gopls")
 vim.lsp.enable("lua_ls")
-vim.lsp.enable("dartls")
+-- vim.lsp.enable("dartls")
 
 require("nvim-tree").setup({
   view = {
@@ -424,12 +648,13 @@ vim.keymap.set("n", "<f11>", ":Outline<CR>", {noremap = true})
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-vim.lsp.config("dartls", {
-  capabilities = capabilities,
-  on_attach = function(_, bufnr)
-    print("✅ Dart LSP attached with nvim-cmp")
-  end,
-})
+--vim.lsp.config("dartls", {
+--  capabilities = capabilities,
+--  on_attach = function(_, bufnr)
+--    print("Dart LSP attached with nvim-cmp")
+--  end,
+--})
+
 
 vim.api.nvim_create_autocmd("BufWritePost", {
   pattern = "*.dart",
@@ -507,3 +732,5 @@ vim.lsp.config("rust_analyzer", {
 })
 
 vim.lsp.enable("rust_analyzer")
+
+vim.api.nvim_set_hl(0, "Cursor", { bg = "#FF0000", fg = "#FF0000" }) -- Sets background to red, foreground to white
