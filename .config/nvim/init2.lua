@@ -657,13 +657,44 @@ require("telescope").setup({
 telescope.load_extension("ag")
 telescope.load_extension('media_files')
 
+
+vim.lsp.config("basedpyright", {
+  capabilities = capabilities,
+  settings = {
+    basedpyright = {
+      analysis = {
+        typeCheckingMode = "standard",
+        autoSearchPaths = true,
+        useLibraryCodeForTypes = true,
+        diagnosticMode = "workspace",
+      },
+    },
+  },
+})
+
+vim.lsp.config("ruff", {
+  capabilities = capabilities,
+  on_attach = function(client, _)
+    -- Let BasedPyright handle hover/docs.
+    -- Ruff should lint/format, not argue about documentation like a tiny bureaucrat.
+    client.server_capabilities.hoverProvider = false
+  end,
+})
+
+
 -- LSP SETUP
 vim.lsp.enable("clangd")
 -- vim.lsp.enable("pylsp")
 vim.lsp.enable("gopls")
 vim.lsp.enable("lua_ls")
+
 -- vim.lsp.enable("dartls")
 vim.lsp.enable("pyright")
+
+vim.lsp.enable("dartls")
+vim.lsp.enable("basedpyright")
+vim.lsp.enable("ruff")
+vim.lsp.enable("ts_ls")
 
 require("nvim-tree").setup({
   view = {
