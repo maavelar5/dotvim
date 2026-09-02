@@ -480,6 +480,47 @@ require("lazy").setup({
               ft = { "markdown", "Avante" },
           },
       },
+  },
+  {
+      "wallpants/ghost-text.nvim",
+      opts = {
+          -- config goes here
+      },
+  },
+  {
+      "kawre/leetcode.nvim",
+      build = ":TSUpdate html",
+      cmd = "Leet",
+
+      dependencies = {
+          "nvim-lua/plenary.nvim",
+          "MunifTanjim/nui.nvim",
+
+          -- Usa el picker que ya tengas:
+          "nvim-telescope/telescope.nvim",
+      },
+
+      opts = {
+          lang = "python3",
+
+          plugins = {
+              non_standalone = true,
+          },
+      },
+  },
+  {
+      "stevearc/conform.nvim",
+
+      opts = {
+          formatters_by_ft = {
+              python = { "ruff_format" },
+          },
+
+          format_on_save = {
+              timeout_ms = 1000,
+              lsp_format = "fallback",
+          },
+      },
   }
 })
 
@@ -618,10 +659,11 @@ telescope.load_extension('media_files')
 
 -- LSP SETUP
 vim.lsp.enable("clangd")
-vim.lsp.enable("pylsp")
+-- vim.lsp.enable("pylsp")
 vim.lsp.enable("gopls")
 vim.lsp.enable("lua_ls")
 -- vim.lsp.enable("dartls")
+vim.lsp.enable("pyright")
 
 require("nvim-tree").setup({
   view = {
@@ -734,3 +776,26 @@ vim.lsp.config("rust_analyzer", {
 vim.lsp.enable("rust_analyzer")
 
 vim.api.nvim_set_hl(0, "Cursor", { bg = "#FF0000", fg = "#FF0000" }) -- Sets background to red, foreground to white
+
+
+-- init.lua
+
+local format_group = vim.api.nvim_create_augroup(
+  "GoFormatOnSave",
+  { clear = true }
+)
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+  group = format_group,
+  pattern = "*.go",
+  callback = function(args)
+    vim.lsp.buf.format({
+      bufnr = args.buf,
+      async = false,
+      timeout_ms = 2000,
+      filter = function(client)
+        return client.name == "gopls"
+      end,
+    })
+  end,
+})
